@@ -1,6 +1,6 @@
 """"
 
-PROYECTO 1  Aplicaciones de IA
+PROYECTO 2  Aplicaciones de IA
 
 Aprendizaje No Supervisado
 
