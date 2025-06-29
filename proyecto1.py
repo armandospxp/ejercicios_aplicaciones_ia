@@ -39,7 +39,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve, f1_score
 
 
 def carga_datos()->Tuple[pd.DataFrame, pd.DataFrame]:
-    """Metodo que retorna un dataframe con la data necesaria para el entrenamiento"""
+    """Metodo que retorna 2 dataframes con la data necesaria para el entrenamiento"""
     data = load_breast_cancer()
     return pd.DataFrame(data.data, columns=data.feature_names), pd.DataFrame(data.target, columns=['target'])
 
@@ -49,7 +49,7 @@ def limpieza_estandarizacion(X:pd.DataFrame, y:pd.DataFrame, size:float=0.2)-> T
     recibe como parametros un dataframe y un size para la distribucion, 0.3 para 70-30, 0.2 para 80-20
     por default es 0.2
     retorna una tupla con los train test split normalizados"""
-    ##Escala de los datos
+    # Escala de los datos
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     df, df_target = carga_datos()
     print("Estandarizacion de los datos")
     X_train, X_test, y_train, y_test= limpieza_estandarizacion(df, df_target, size=0.3)
-    ###Cargamos los modelos en un diccionario para mejor tratamiento
+    # Cargamos los modelos en un diccionario para mejor tratamiento
     modelos = {'random_forest':RandomForestClassifier(random_state=42), 'svm':SVC(probability=True, random_state=42)}
 
     # almacenamiento de resultados(estaremos iterando y guardando en un diccionario el resultado de los entrenamientos
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     resultados = {}
 
-    ### Comenzamos a iterar para entrenar los modelos
+    # Comenzamos a iterar para entrenar los modelos
     print("Comienza entrenamiento de los datos")
     for nombre, modelo in modelos.items():
         modelo.fit(X_train, y_train)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     print("Metricas de desempenio de RandomForest vs SVM:")
     print(resultados_df)
 
-    #Grafico de curvas ROC
+    # Grafico de curvas ROC
 
     plt.figure(figsize=(8, 6))
     for nombre, modelo in modelos.items():
