@@ -15,7 +15,11 @@ email: armandospxp@gmail.com
 
 
 ###Importacion de librerias
+
+# librerias de tipos
 from typing import Tuple
+
+# pandas y matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
 
