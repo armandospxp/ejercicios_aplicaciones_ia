@@ -12,7 +12,7 @@ email: armandospxp@gmail.com
 
 
 """
-###Importacion de librerias
+# Importacion de librerias
 
 # pandas y matplotplib
 import pandas as pd
@@ -32,16 +32,17 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 
 
-def carga_datos()->pd.DataFrame:
+def carga_datos() -> pd.DataFrame:
     """Metodo que retorna 2 dataframes con la data necesaria para el entrenamiento"""
     iris = load_iris()
     return pd.DataFrame(iris.data, columns=iris.feature_names)
 
 
-def estandarizacion(X:pd.DataFrame)->pd.Series:
+def estandarizacion(X: pd.DataFrame) -> pd.Series:
     """Metodo para estandarizar los datos con StandarScaler"""
     scaler = StandardScaler()
     return scaler.fit_transform(X)
+
 
 if __name__ == '__main__':
     """Corrida del script"""
@@ -61,7 +62,8 @@ if __name__ == '__main__':
 
     pca = PCA(n_components=2, random_state=42)
     d_pca = pca.fit_transform(d_est)
-    print(f"Ratio de varianza para 2 componentess): {pca.explained_variance_ratio_.sum():.2%}")
+    print(
+        f"Ratio de varianza para 2 componentess): {pca.explained_variance_ratio_.sum():.2%}")
 
     # ajustamos el numero de clusters a 3
     n_clusters = 3
@@ -82,7 +84,7 @@ if __name__ == '__main__':
         "Silhouette": [],
         "Davies-Bouldin": []
     }
-
+    print("\n=== Evaluación de la calidad del clustering ===")
     for nombre, etiquetas in [("Algoritmo KMeans", etiquetas_kmeans), ("Algorigtmo Agglomerative", etiquetas_agg)]:
         sil = silhouette_score(d_est, etiquetas)
         db = davies_bouldin_score(d_est, etiquetas)
@@ -90,13 +92,13 @@ if __name__ == '__main__':
         metrics["Silhouette"].append(sil)
         metrics["Davies-Bouldin"].append(db)
 
-    print("\nMetricas para clustering:")
+    print("\n=== Métricas de clustering ===")
     for i in range(len(metrics["Algoritmo"])):
         print(f"{metrics['Algoritmo'][i]:>15}: Silhouette = {metrics['Silhouette'][i]:.3f}, "
               f"Davies-Bouldin = {metrics['Davies-Bouldin'][i]:.3f}")
 
-    # 5. Visualizar clusteres EOFError 2D
-
+    # 5. Visualizar clusteres 2D
+    print("\n=== Visualización de los clusters en 2D ===")
     # KMeans
     plt.figure()
     plt.scatter(d_pca[:, 0], d_pca[:, 1], c=etiquetas_kmeans)
