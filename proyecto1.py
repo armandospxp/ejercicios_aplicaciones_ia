@@ -14,7 +14,7 @@ email: armandospxp@gmail.com
 """
 
 
-###Importacion de librerias
+# Importacion de librerias
 
 # librerias de tipos
 from typing import Tuple
@@ -38,13 +38,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve, f1_score
 
 
-def carga_datos()->Tuple[pd.DataFrame, pd.DataFrame]:
+def carga_datos() -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Metodo que retorna 2 dataframes con la data necesaria para el entrenamiento"""
     data = load_breast_cancer()
     return pd.DataFrame(data.data, columns=data.feature_names), pd.DataFrame(data.target, columns=['target'])
 
 
-def limpieza_estandarizacion(X:pd.DataFrame, y:pd.DataFrame, size:float=0.2)-> Tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
+def limpieza_estandarizacion(X: pd.DataFrame, y: pd.DataFrame, size: float = 0.2) -> Tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
     """Metodo para realizar limpieza y estandarizacion del dataframe,
     recibe como parametros un dataframe y un size para la distribucion, 0.3 para 70-30, 0.2 para 80-20
     por default es 0.2
@@ -55,15 +55,18 @@ def limpieza_estandarizacion(X:pd.DataFrame, y:pd.DataFrame, size:float=0.2)-> T
 
     return train_test_split(X_scaled, y, test_size=size)
 
+
 if __name__ == '__main__':
     """Corrida del script"""
     print("Inicio del script")
-    print("Carga de datos")
+    print("\n=== Carga de datos ===")
     df, df_target = carga_datos()
-    print("Estandarizacion de los datos")
-    X_train, X_test, y_train, y_test= limpieza_estandarizacion(df, df_target, size=0.3)
+    print("\n=== Estandarizacion de los datos ===")
+    X_train, X_test, y_train, y_test = limpieza_estandarizacion(
+        df, df_target, size=0.3)
     # Cargamos los modelos en un diccionario para mejor tratamiento
-    modelos = {'random_forest':RandomForestClassifier(random_state=42), 'svm':SVC(probability=True, random_state=42)}
+    modelos = {'random_forest': RandomForestClassifier(
+        random_state=42), 'svm': SVC(probability=True, random_state=42)}
 
     # almacenamiento de resultados(estaremos iterando y guardando en un diccionario el resultado de los entrenamientos
     # y pruebas)
@@ -71,7 +74,7 @@ if __name__ == '__main__':
     resultados = {}
 
     # Comenzamos a iterar para entrenar los modelos
-    print("Comienza entrenamiento de los datos")
+    print("\n=== Entrenamiento de los modelos ===")
     for nombre, modelo in modelos.items():
         modelo.fit(X_train, y_train)
 
@@ -86,19 +89,19 @@ if __name__ == '__main__':
         # calculo de las metricas
 
         metricas = {
-           'accuracy':accuracy_score(y_pred, y_test),
-           'roc_auc':roc_auc_score(y_test, y_proba),
-           'f1_score':f1_score(y_pred, y_test)
+            'accuracy': accuracy_score(y_pred, y_test),
+            'roc_auc': roc_auc_score(y_test, y_proba),
+            'f1_score': f1_score(y_pred, y_test)
         }
         resultados[nombre] = metricas
 
     resultados_df = pd.DataFrame(resultados).T
 
-    print("Metricas de desempenio de RandomForest vs SVM:")
+    print("\n=== Resultados de los modelos ===")
     print(resultados_df)
 
     # Grafico de curvas ROC
-
+    print("\n=== Graficando curvas ROC ===")
     plt.figure(figsize=(8, 6))
     for nombre, modelo in modelos.items():
         y_proba = modelo.predict_proba(X_test)[:, 1]
